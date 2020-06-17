@@ -4,7 +4,9 @@
   "description": "Web app and service to manage sim cards",
   "main": "server.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "deploy": "gcloud app deploy",
+    "dev": "nodemon server.js"
   },
   "repository": {
     "type": "git",
