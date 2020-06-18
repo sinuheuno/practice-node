@@ -7,7 +7,7 @@
  */
 
 exports.index = (res, entity) => {
-    entity.model.get((err, results) => {
+    entity.model.find({},(err, results) => {
         if (err) {
             res.json({
                 status: "error",

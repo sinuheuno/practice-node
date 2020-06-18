@@ -1,12 +1,11 @@
 // Import Models
 const User = require('../model/user');
-const secretkey = require('../utils/secretkey');
-const messages = require('../utils/messages');
-const userTypes = require('../utils/validations/user-types');
+const secretkey = require('../utils/secretKey');
+const userTypes = require('../utils/validations/user-type');
 const userValidator = require('../utils/validations/user-validator');
 const jwt = require('jsonwebtoken');
 let bcrypt = require('bcrypt');
-let models = require('../model/list');
+let models = require('../utils/model-list');
 let controller = require('./base');
 
 // Handle index actions

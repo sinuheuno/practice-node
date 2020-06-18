@@ -102,7 +102,13 @@ exports.messages = {
         }
     },
     sim: {
-        error: {},
+        error: {
+            couldNotGetSims: {
+                code: 1002,
+                status: 'error',
+                message: 'Couldn\'t get sims report. Try again later'
+            }
+        },
         success: {
             simsRegistered: {
                 code: 2000,
