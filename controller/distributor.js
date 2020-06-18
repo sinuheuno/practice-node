@@ -1,5 +1,5 @@
-const userTypes = require('../utils/validations/user-types');
-const models = require('../model/list');
+const userTypes = require('../utils/validations/user-type');
+const models = require('../utils/model-list');
 const baseController = require('./base');
 const userValidator = require('../utils/validations/user-validator');
 const jwt = require('jsonwebtoken');
@@ -85,93 +85,6 @@ exports.delete = (req, res) => {
         .then(response => {
             if (response) {
                 baseController.delete(req, res, models.list.distributor);
-            }
-        })
-};
-
-/**
- * Add sims to a distributor
- * @param req Request object
- * @param res Response object
- */
-exports.pushSims = (req, res) => {
-    userValidator.validateUser(req.token, res, userTypes.admin)
-        .then(response => {
-            if (response) {
-                models.list.distributor.model.findById(req.params.id, (error, distributor) => {
-                    if (error) {
-                        res.json({
-                            status: "error",
-                            message: err,
-                        });
-                    }
-
-                    if (distributor.sims === undefined) {
-                        distributor.sims = [];
-                    }
-
-                    let decoded = jwt.decode(req.token, {complete: true});
-
-                    models.list.user.model.findById(decoded.payload._id, (error, user) => {
-                        if (error) {
-                            res.json(error);
-                        } else {
-                            createIdsForSims(req.body.sims, user)
-                                .then(response => {
-                                    if (response !== undefined) {
-                                        let newSimsArray = distributor.sims.concat(response);
-                                        distributor.sims = newSimsArray;
-                                        distributor.save((error) => {
-                                            if (error) {
-                                                res.json(error);
-                                            } else {
-                                                res.json({
-                                                    message: models.list.distributor.messages.success.simsUpdated,
-                                                    data: distributor
-                                                });
-                                            }
-                                        });
-                                    } else {
-                                        res.json(models.list.distributor.messages.error.couldNotCreateIds)
-                                    }
-                                });
-                        }
-                    });
-                });
-            }
-        })
-}
-
-/**
- * Deletes all sims of a distributor
- * @param req Request object
- * @param res Response object
- */
-exports.clearSims = (req, res) => {
-    userValidator.validateUser(req.token, res, userTypes.admin)
-        .then(response => {
-            if (response) {
-                models.list.distributor.model.findById(req.params.id, (error, distributor) => {
-                    if (error) {
-                        res.json({
-                            status: "error",
-                            message: err,
-                        })
-                    } else {
-                        distributor.sims = [];
-
-                        distributor.save(error => {
-                            if (error) {
-                                res.json(error);
-                            } else {
-                                res.json({
-                                    message: models.list.distributor.messages.success.simsCleared,
-                                    data: distributor
-                                })
-                            }
-                        });
-                    }
-                });
             }
         })
 };

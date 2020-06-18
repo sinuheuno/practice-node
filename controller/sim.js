@@ -1,5 +1,5 @@
-const userTypes = require('../utils/validations/user-types');
-const models = require('../model/list');
+const userTypes = require('../utils/validations/user-type');
+const models = require('../utils/model-list');
 const baseController = require('./base');
 const userValidator = require('../utils/validations/user-validator');
 const jwt = require('jsonwebtoken');
@@ -236,9 +236,9 @@ exports.getSims = (req, res) => {
         .then(response => {
             if (response) {
                 if (req.params.id === undefined) {
-                    models.list.distributor.model.find({}, { 'sims': 1 }, function (err, sims) {
+                    models.list.sim.model.find({}, function (err, sims) {
                         if (err) {
-                            res.json({ meesasge: 'errorrrrr', err })
+                            res.json(err)
                         } else {
                             new Promise((resolve, reject) => {
                                 let result = {
@@ -246,13 +246,11 @@ exports.getSims = (req, res) => {
                                     notActivatedSims: 0
                                 };
                                 sims.forEach(sim => {
-                                    sim.sims.forEach(_sim => {
-                                        if (_sim.active === true) {
-                                            result.activatedSims++;
-                                        } else {
-                                            result.notActivatedSims++;
-                                        }
-                                    })
+                                    if (sim.active === true) {
+                                        result.activatedSims++;
+                                    } else {
+                                        result.notActivatedSims++;
+                                    }
                                 })
 
                                 if (result.activatedSims === -1 && result.notActivatedSims === -1) {
@@ -263,7 +261,7 @@ exports.getSims = (req, res) => {
                             })
                                 .then(result => {
                                     res.json({
-                                        message: models.list.distributor.messages.success.simsRetrieved,
+                                        message: models.list.sim.messages.success.retrieved,
                                         result
                                     })
                                 })
@@ -273,9 +271,9 @@ exports.getSims = (req, res) => {
                         }
                     });
                 } else {
-                    models.list.distributor.model.find({ _id: ObjectId(req.params.id) }, { 'sims': 1 }, function (err, sims) {
+                    models.list.sim.model.find({ distributor_id: ObjectId(req.params.id) }, function (err, sims) {
                         if (err) {
-                            res.json({ meesasge: 'errorrrrr', err })
+                            res.json(err)
                         } else {
                             new Promise((resolve, reject) => {
                                 let result = {
@@ -283,13 +281,11 @@ exports.getSims = (req, res) => {
                                     notActivatedSims: 0
                                 };
                                 sims.forEach(sim => {
-                                    sim.sims.forEach(_sim => {
-                                        if (_sim.active === true) {
-                                            result.activatedSims++;
-                                        } else {
-                                            result.notActivatedSims++;
-                                        }
-                                    })
+                                    if (sim.active === true) {
+                                        result.activatedSims++;
+                                    } else {
+                                        result.notActivatedSims++;
+                                    }
                                 })
 
                                 if (result.activatedSims === -1 && result.notActivatedSims === -1) {
@@ -300,12 +296,12 @@ exports.getSims = (req, res) => {
                             })
                                 .then(result => {
                                     res.json({
-                                        message: models.list.distributor.messages.success.simsRetrieved,
+                                        message: models.list.sim.messages.success.retrieved,
                                         result
                                     })
                                 })
                                 .catch(result => {
-                                    res.json(models.list.distributor.messages.error.couldNotGetSims)
+                                    res.json(models.list.sim.messages.error.couldNotGetSims)
                                 })
                         }
                     });
