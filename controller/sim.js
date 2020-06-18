@@ -114,9 +114,7 @@ exports.pushSims = (req, res) => {
                                 addCreatorInfoToSim(req.body.sims, user, distributor)
                                     .then(response => {
                                         if (response !== undefined) {
-                                            let newSimsArray = response;
-
-                                            models.list.sim.model.insertMany(newSimsArray, (error, sims) => {
+                                            models.list.sim.model.insertMany(response, (error, sims) => {
                                                 if (error) {
                                                     res.json(error);
                                                 } else {
@@ -136,7 +134,7 @@ exports.pushSims = (req, res) => {
                 });
             }
         })
-}
+};
 
 /**
  * Deletes all sims of a distributor
@@ -151,7 +149,7 @@ exports.clearSims = (req, res) => {
                     if (error) {
                         res.json({
                             status: "error",
-                            message: err,
+                            message: error,
                         })
                     } else {
                         res.json({
@@ -176,7 +174,7 @@ exports.updatePhone = (req, res) => {
                     if (error) {
                         res.json({
                             status: "error",
-                            message: err,
+                            message: error,
                         })
                     } else {
                         let _sim = sim[0];
@@ -216,7 +214,7 @@ exports.getSimsByDistributorId = (req, res) => {
                     } else {
                         if (sims !== null) {
                             res.json({
-                                meesasge: models.list.sim.messages.success.retrieved,
+                                message: models.list.sim.messages.success.retrieved,
                                 data: sims
                             })
                         }
@@ -251,7 +249,7 @@ exports.getSims = (req, res) => {
                                     } else {
                                         result.notActivatedSims++;
                                     }
-                                })
+                                });
 
                                 if (result.activatedSims === -1 && result.notActivatedSims === -1) {
                                     reject(result);
@@ -286,7 +284,7 @@ exports.getSims = (req, res) => {
                                     } else {
                                         result.notActivatedSims++;
                                     }
-                                })
+                                });
 
                                 if (result.activatedSims === -1 && result.notActivatedSims === -1) {
                                     reject(result);
@@ -317,7 +315,7 @@ exports.getSims = (req, res) => {
  * @returns Array of sims with info about the user that rigister them
  */
 function addCreatorInfoToSim(sims, user, distributor) {
-    let promise = new Promise((resolve, reject) => {
+    return new Promise((resolve, reject) => {
         sims.forEach(sim => {
             sim['registered_by'] = {
                 name: user.name,
@@ -329,6 +327,4 @@ function addCreatorInfoToSim(sims, user, distributor) {
 
         resolve(sims)
     });
-
-    return promise;
 }
