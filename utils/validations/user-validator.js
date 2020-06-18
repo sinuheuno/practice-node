@@ -1,4 +1,3 @@
-const _secret = require('../secretkey');
 const jwt = require('jsonwebtoken');
 
 /**
@@ -9,10 +8,10 @@ const jwt = require('jsonwebtoken');
  * @returns promise
  */
 exports.validateUser = (token, res, grant) => {
-    let promise = new Promise ((resolve, reject) => {
-        jwt.verify(token, _secret.secret.secretKey, function (err, authData) {
+    return new Promise((resolve, reject) => {
+        jwt.verify(token, process.env.SECRET_KEY, function (err, authData) {
             if (err) {
-                if (err.name == 'TokenExpiredError') {
+                if (err.name === 'TokenExpiredError') {
                     res.json({
                         message: 'Access token expired',
                         expireDate: err.expiredAt
@@ -32,8 +31,6 @@ exports.validateUser = (token, res, grant) => {
             }
         });
     });
-
-    return promise;
 };
 /**
  * Validates if user's type is equal to user's
@@ -42,10 +39,10 @@ exports.validateUser = (token, res, grant) => {
  * @param {*} userTypes
  */
 function validateUserType(token, userTypes) {
-    var promise = new Promise(function(resolve, reject){
-        var decoded = jwt.decode(token, {complete: true});
-        var result = false;
-        var userType = decoded.payload.type;
+    return new Promise(function (resolve, reject) {
+        const decoded = jwt.decode(token, {complete: true});
+        let result = false;
+        const userType = decoded.payload.type;
 
         userTypes.forEach(type => {
             if (type === userType) {
@@ -53,7 +50,5 @@ function validateUserType(token, userTypes) {
             }
         });
         resolve(result);
-    })
-
-    return promise;
+    });
 }

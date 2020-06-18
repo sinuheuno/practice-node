@@ -1,6 +1,5 @@
 // Import Models
 const User = require('../model/user');
-const secretkey = require('../utils/secretKey');
 const userTypes = require('../utils/validations/user-type');
 const userValidator = require('../utils/validations/user-validator');
 const jwt = require('jsonwebtoken');
@@ -16,13 +15,13 @@ exports.index =  (req, res) => {
                 controller.index(res, models.list.user);
             }
         })
-}
+};
 // Handle create user actions
 exports.new = (req, res) => {
     userValidator.validateUser(req.token, res, userTypes.user)
         .then(response => {
             if (response) {
-                bcrypt.hash(req.body.password, secretkey.secret.saltRounds, (err, hash) => {
+                bcrypt.hash(req.body.password, process.env.SALT_ROUNDS, (err, hash) => {
                     if (err) {
                         res.json(models.list.user.messages.error.creatingUserError);
                     } else {
@@ -51,7 +50,7 @@ exports.new = (req, res) => {
 };
 
 exports.newUserWithoutAuthentication = (req, res) => {
-    bcrypt.hash(req.body.password, secretkey.secret.saltRounds, (err, hash) => {
+    bcrypt.hash(req.body.password, process.env.SALT_ROUNDS, (err, hash) => {
         if (err) {
             res.json(err);
         } else {
@@ -114,7 +113,7 @@ exports.login = (req, res) => {
         } else if (user.length === 1) {
             bcrypt.compare(req.body.password, user[0].password, (err, result) => {
                 if (result) {
-                    jwt.sign({ user: user[0].email, password: user[0].password, type: user[0].type, _id: user[0]._id }, secretkey.secret.secretKey, { expiresIn: '30d' }, (err, token) => {
+                    jwt.sign({ user: user[0].email, password: user[0].password, type: user[0].type, _id: user[0]._id }, process.env.SECRET_KEY, { expiresIn: '30d' }, (err, token) => {
                         if (err) {
                             res.json(err)
                         } else {

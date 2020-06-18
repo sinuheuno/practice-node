@@ -11,6 +11,7 @@ const express         = require('express'),
     simRoutes         = require('./route/sim');
 
 const server = express();
+require('dotenv').config();
 
 mongoose.Promise = global.Promise;
 mongoose.connect(database.url, { useNewUrlParser: true, useUnifiedTopology: true  });

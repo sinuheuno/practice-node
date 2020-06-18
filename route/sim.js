@@ -3,8 +3,8 @@ const express = require('express'),
     userController = require('../controller/user');
     simController = require('../controller/sim');
 
-router.get('/', userController.verifyToken, simController.index)
-router.get('/report', userController.verifyToken, simController.getSims)
+router.get('/', userController.verifyToken, simController.index);
+router.get('/report', userController.verifyToken, simController.getSims);
 router.get('/report/:id', userController.verifyToken, simController.getSims);
 router.get('/distributor/:id', userController.verifyToken, simController.getSimsByDistributorId);
 router.put('/:id', userController.verifyToken, simController.update);
