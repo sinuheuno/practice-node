@@ -2,6 +2,7 @@ const RECARGAS_API_KEY = 'c72c9adf1a4f7433b4153c5ed20758f5';
 const PRODUCT_CODE = '01000050';
 const AMOUNT = 50;
 const RECARGAS_URL = 'http://recargasnacionales.com/wstest?wsdl';
+const CUSTOMER_SERVICE_NUMBER = "999 573 1249"
 
 const express = require('express'),
     router = express.Router(),
@@ -34,9 +35,15 @@ router.route('/')
                 soap.createClient(RECARGAS_URL, function(err, client) {
                     client.TAERequest(args, function(err, result) {
                         if (err) {
+                            twiml.message('Por el momento el sistema no está disponible. Para más información comuníquese al teléfono: ' + CUSTOMER_SERVICE_NUMBER);
+                            res.end(twiml.toString());
                             console.log(err);
                         } else {
-                            twiml.message('Se ha abonado $' + result.return.Amount['$value'] + '.00 MXN de saldo a la linea ' + result.return.PhoneNumber['$value'] + ' con el folio ' + result.return.TransactionNumber['$value']);
+                            if (result.return.ReturnCode['$value'] === '0') {
+                                twiml.message('Se ha abonado $' + result.return.Amount['$value'] + '.00 MXN de saldo a la linea ' + result.return.PhoneNumber['$value'] + ' con el folio ' + result.return.TransactionNumber['$value']);
+                            } else {
+                                twiml.message('Por el momento el sistema no está disponible. Para más información comuníquese al teléfono: ' + CUSTOMER_SERVICE_NUMBER);
+                            }
                             res.end(twiml.toString());
                         }
                     })
