@@ -1,9 +1,10 @@
-const express    = require('express'),
-    mongoose     = require('mongoose'),
-    bodyParser   = require('body-parser'),
-    database     = require('./config/db'),
-    cors         = require('cors'),
-    port         = process.env.PORT || 8080;
+const express     = require('express'),
+    mongoose      = require('mongoose'),
+    bodyParser    = require('body-parser'),
+    database      = require('./config/db'),
+    cors          = require('cors'),
+    port          = process.env.PORT || 8080,
+    balanceRoutes = require('./route/balance');
 
 const server = express();
 
@@ -15,6 +16,8 @@ server.use(cors())
     .use(require('morgan')('dev'))
     .use(bodyParser.urlencoded({ extended: true }))
     .use(bodyParser.json());
+
+server.use('/api/v1/balance', balanceRoutes);
 
 server.get('/', (req, res) => {
     res.send("API is working :D")
