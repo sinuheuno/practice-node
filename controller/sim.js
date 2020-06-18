@@ -98,8 +98,8 @@ exports.pushSims = (req, res) => {
     userValidator.validateUser(req.token, res, userTypes.admin)
         .then(response => {
             if (response) {
-                models.list.distributor.model.findById(req.params.id, (error, distributor) => {
-                    if (error) {
+                models.list.distributor.model.findById(req.params.id, (err, distributor) => {
+                    if (err) {
                         res.json({
                             status: "error",
                             message: err,

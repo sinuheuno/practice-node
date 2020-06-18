@@ -131,5 +131,21 @@ exports.messages = {
                 message: 'SIMs retrieved'
             }
         }
+    },
+    transaction: {
+        error: {
+            couldNotCompleteTransaction: {
+                code: 1002,
+                status: 'error',
+                message: 'Couldn\'t complete transaction. Try again later'
+            }
+        },
+        success: {
+            transactionCompleted: {
+                code: 2000,
+                status: 'success',
+                message: 'Transaction completed'
+            }
+        }
     }
-}
+};

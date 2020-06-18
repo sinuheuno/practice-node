@@ -1,6 +1,6 @@
 const express = require('express'),
     router = express.Router(),
-    userController = require('../controller/user');
+    userController = require('../controller/user'),
     distributorController = require('../controller/distributor');
 
 router.get('/', userController.verifyToken, distributorController.index);
