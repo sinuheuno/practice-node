@@ -1,6 +1,5 @@
 const PRODUCT_CODE = '01000050';
 const AMOUNT = 50;
-const RECARGAS_URL = 'http://recargasnacionales.com/wstest?wsdl';
 const CUSTOMER_SERVICE_NUMBER = '999 573 1249';
 
 const soap = require('soap'),
@@ -31,9 +30,28 @@ exports.addBalance = (req, res) => {
                 PhoneNumber: nakedPhoneNumber
             };
 
+
+
+
+
+
+
+            // AGREGA TU CODIGO AQUI!!!
+
+
+
+
+
+
+
+
+
+
+
+
             res.end("Transaction exitosa");
 
-            // soap.createClient(RECARGAS_URL, { wsdl_options: { timeout: 70000 }  },function(err, client) {
+            // soap.createClient(process.env.RECARGAS_API_URL, { wsdl_options: { timeout: 70000 }  },function(err, client) {
             //     client.TAERequest(args, function(err, result) {
             //         if (err) {
             //             twiml.message('Por el momento el sistema no está disponible. Para más información comuníquese al teléfono: ' + CUSTOMER_SERVICE_NUMBER);

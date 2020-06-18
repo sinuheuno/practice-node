@@ -1,3 +1,5 @@
+require('dotenv').config();
+
 module.exports = {
-    url: 'mongodb+srv://db-sim-dsitributor-user:VCSb6mawW96OJQ3n@sim-distributor-0wwqg.mongodb.net/<dbname>?retryWrites=true&w=majority'
+    url: process.env.MONGODB_URL
 };
