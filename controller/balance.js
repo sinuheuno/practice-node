@@ -96,8 +96,12 @@ exports.addBalance = (req, res) => {
                 }
             })
             .catch(error => {
-                if (error === 404)
+                if (error === 404) {
                     res.sendStatus(error)
+                } else {
+                    // Error whit database
+                    res.json(error)
+                }
             })
     } else {
         twiml.message(enteredPhoneNumber + ' no es un número de teléfono válido',);
