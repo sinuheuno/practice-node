@@ -107,6 +107,11 @@ exports.messages = {
                 code: 1002,
                 status: 'error',
                 message: 'Couldn\'t get sims report. Try again later'
+            },
+            simNotFound: {
+                code: 1002,
+                status: 'error',
+                message: 'SIM doesn\'t exist'
             }
         },
         success: {

@@ -6,7 +6,8 @@ const soap = require('soap'),
     MessagingResponse = require('twilio').twiml.MessagingResponse,
     transaction = require('../model/transaction'),
     models = require('../utils/model-list'),
-    ObjectId = require('mongoose').Types.ObjectId;
+    ObjectId = require('mongoose').Types.ObjectId,
+    Transaction = require('../model/transaction');
 
 exports.addBalance = (req, res) => {
     const twiml = new MessagingResponse();
@@ -36,7 +37,30 @@ exports.addBalance = (req, res) => {
 
 
 
-            // AGREGA TU CODIGO AQUI!!!
+            /**
+             ***** A ver si sí es así 
+             */
+            let transaction = new Transaction();
+
+            transaction.date = '',
+            transaction.phone_number = '',
+            transaction.distributor_id = '',
+            transaction.transaction_number = '',
+            transaction.transaction_id = '',
+            transaction.amount = '',
+            transaction.return_code = '',
+            transaction.succes = ''
+
+            // save the user and check for errors
+            transaction.save((err) => {
+                if (err) {
+                    res.json(err);
+                } else {
+                    
+                    // Saved succesfully 
+                    
+                }
+            });
 
 
 

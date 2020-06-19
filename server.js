@@ -9,6 +9,7 @@ const express         = require('express'),
     userRoutes        = require('./route/user');
     distributorRoutes = require('./route/distributor');
     simRoutes         = require('./route/sim');
+    noauthRoutes      = require('./route/noauth');
 
 const server = express();
 require('dotenv').config();
@@ -29,6 +30,8 @@ server.use('/api/v1/user', userRoutes);
 server.use('/api/v1/distributor', distributorRoutes);
 
 server.use('/api/v1/sim', simRoutes);
+
+server.use('/api/v1/user', noauthRoutes);
 
 server.use(serveStatic(__dirname + "/dist"));
 
