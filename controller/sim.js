@@ -200,6 +200,40 @@ exports.updatePhone = (req, res) => {
 };
 
 /**
+ * Search a SIM by phone_number. If extists, responses true an the sim object.
+ * Otherwise responses false
+ * @param req Request object
+ * @param res Response object
+ */
+exports.existsSim = (req, res) => {
+    userValidator.validateUser(req.token, res, userTypes.admin)
+        .then(response => {
+            if (response) {
+                if (req.params.phone.length === 10) {
+                    models.list.sim.model.find({ phone_number: req.params.phone }, (error, sim) => {
+                        if (error) {
+                            res.json({
+                                status: "error",
+                                message: error,
+                            })
+                        } else {
+                            if (sim !== null && sim.length === 1) {
+                                res.json({
+                                    data: sim[0]
+                                })
+                            } else {
+                                res.sendStatus(404)
+                            }
+                        }
+                    });
+                } else {
+                    res.sendStatus(404)
+                }
+            }
+        })
+};
+
+/**
  * Handle the roports
  * @param req Request object
  * @param res Response object

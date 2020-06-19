@@ -49,33 +49,6 @@ exports.new = (req, res) => {
         })
 };
 
-exports.newUserWithoutAuthentication = (req, res) => {
-    bcrypt.hash(req.body.password, process.env.SALT_ROUNDS, (err, hash) => {
-        if (err) {
-            res.json(err);
-        } else {
-            var user = new User();
-            user.active = true
-            user.name = req.body.name;
-            user.type = req.body.type;
-            user.email = req.body.email;
-            user.password = hash;
-
-            // save the user and check for errors
-            user.save((err) => {
-                if (err) {
-                    res.json(err);
-                } else {
-                    res.json({
-                        message: models.list.user.messages.success.userCreated,
-                        data: user
-                    });
-                }
-            });
-        }
-    });
-};
-
 // Handle view user info
 exports.view = (req, res) => {
     userValidator.validateUser(req.token, res, userTypes.admin)
