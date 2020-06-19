@@ -9,7 +9,6 @@ router.get('/report/:id', userController.verifyToken, simController.getSims);
 router.get('/distributor/:id', userController.verifyToken, simController.getSimsByDistributorId);
 router.put('/:id', userController.verifyToken, simController.update);
 router.put('/phone/:phone', userController.verifyToken, simController.updatePhone);
-router.get('/phone/:phone', userController.verifyToken, simController.existsSim);
 router.post('/push/:id', userController.verifyToken, simController.pushSims);
 router.delete('/clear/:id', userController.verifyToken, simController.clearSims);
 

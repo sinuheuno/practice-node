@@ -113,14 +113,16 @@ exports.pushSims = (req, res) => {
                             } else {
                                 addCreatorInfoToSim(req.body.sims, user, distributor)
                                     .then(response => {
+                                        console.log('respuesta', response)
                                         if (response !== undefined) {
-                                            models.list.sim.model.insertMany(response, (error, sims) => {
+                                            models.list.sim.model.insertMany(response.sims, (error, sims) => {
                                                 if (error) {
                                                     res.json(error);
                                                 } else {
                                                     res.json({
                                                         message: models.list.sim.messages.success.simsRegistered,
-                                                        data: sims
+                                                        registered_sims: sims,
+                                                        not_registered_sims: response.wrongSims
                                                     });
                                                 }
                                             });
@@ -343,22 +345,35 @@ exports.getSims = (req, res) => {
 };
 
 /**
- * Adds info about the user that register the sims
+ * Adds info about the user that register the sims and validates phone
+ * and serial number
  * @param sims Array of sims
  * @param user User that adds the sims
  * @returns Array of sims with info about the user that rigister them
  */
 function addCreatorInfoToSim(sims, user, distributor) {
     return new Promise((resolve, reject) => {
-        sims.forEach(sim => {
-            sim['registered_by'] = {
-                name: user.name,
-                email: user.email,
-                _id: user.id
-            };
-            sim['distributor_id'] = distributor._id
+        let result = {
+            sims: [],
+            wrongSims: []
+        }
+
+        sims.forEach((sim) => {
+            if (/^\d+$/.test(sim.phone_number) && sim.phone_number.length === 10
+                && /^\d+$/.test(sim.serial_number) && sim.serial_number.length === 19
+            ) {
+                sim['registered_by'] = {
+                    name: user.name,
+                    email: user.email,
+                    _id: user.id
+                };
+                sim['distributor_id'] = distributor._id
+                result.sims.push(sim);
+            } else {
+                result.wrongSims.push(sim)
+            }
         });
 
-        resolve(sims)
+        resolve(result)
     });
 }
