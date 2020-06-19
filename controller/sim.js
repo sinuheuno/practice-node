@@ -205,32 +205,20 @@ exports.updatePhone = (req, res) => {
  * @param req Request object
  * @param res Response object
  */
-exports.existsSim = (req, res) => {
-    userValidator.validateUser(req.token, res, userTypes.admin)
-        .then(response => {
-            if (response) {
-                if (req.params.phone.length === 10) {
-                    models.list.sim.model.find({ phone_number: req.params.phone }, (error, sim) => {
-                        if (error) {
-                            res.json({
-                                status: "error",
-                                message: error,
-                            })
-                        } else {
-                            if (sim !== null && sim.length === 1) {
-                                res.json({
-                                    data: sim[0]
-                                })
-                            } else {
-                                res.sendStatus(404)
-                            }
-                        }
-                    });
+exports.existsSim = (nakedPhoneNumber, res) => {
+    return new Promise((resolve, reject) => {
+        models.list.sim.model.find({ phone_number: nakedPhoneNumber }, (error, sim) => {
+            if (error) {
+                reject(error);
+            } else {
+                if (sim !== null && sim.length === 1) {
+                    resolve(sim[0]);
                 } else {
-                    res.sendStatus(404)
+                    reject(404)
                 }
             }
-        })
+        });
+    })
 };
 
 /**
