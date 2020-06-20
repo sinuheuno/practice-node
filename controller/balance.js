@@ -9,8 +9,7 @@ const soap = require('soap'),
 
 exports.addBalance = (req, res) => {
     const twiml = new MessagingResponse();
-    //const enteredPhoneNumber = req.body.Body;
-    const enteredPhoneNumber = "9911083001";
+    const enteredPhoneNumber = req.body.Body;
     const nakedPhoneNumber = enteredPhoneNumber.replace(/[^0-9]/g, '');
 
     res.writeHead(200, {'Content-Type': 'text/xml'});
@@ -53,28 +52,16 @@ exports.addBalance = (req, res) => {
                                     transaction.success = true;
                                     twiml.message('Se ha abonado $' + result.return.Amount['$value'] + '.00 MXN de saldo a la linea ' + result.return.PhoneNumber['$value'] + ' con el folio ' + result.return.TransactionNumber['$value']);
 
-
-
-
-
-                                    // Agrégalo aquí.
                                     sim.active = true;
-                                    sim.activation_date = Date.now()
+                                    sim.activation_date = Date.now();
 
                                     sim.save(err => {
                                         if (err) {
                                             console.log(err)
                                         } else {
-                                            console.log('Success updating sim')
+                                            console.log('Success Ppdating Sim')
                                         }
                                     })
-
-
-
-
-
-
-
                                 } else {
                                     console.log("Transaction Error");
                                     transaction.success = false;

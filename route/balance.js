@@ -2,6 +2,6 @@ const express = require('express'),
     router = express.Router(),
     balanceController = require('../controller/balance');
 
-router.get('/', balanceController.addBalance);
+router.post('/', balanceController.addBalance);
 
 module.exports = router;
