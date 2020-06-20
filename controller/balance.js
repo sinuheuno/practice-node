@@ -4,15 +4,13 @@ const CUSTOMER_SERVICE_NUMBER = '999 573 1249';
 
 const soap = require('soap'),
     MessagingResponse = require('twilio').twiml.MessagingResponse,
-    models = require('../utils/model-list'),
-    ObjectId = require('mongoose').Types.ObjectId,
     Transaction = require('../model/transaction'),
     simController = require('../controller/sim');
 
 exports.addBalance = (req, res) => {
     const twiml = new MessagingResponse();
     //const enteredPhoneNumber = req.body.Body;
-    const enteredPhoneNumber = "9911083007";
+    const enteredPhoneNumber = "9911083001";
     const nakedPhoneNumber = enteredPhoneNumber.replace(/[^0-9]/g, '');
 
     res.writeHead(200, {'Content-Type': 'text/xml'});
@@ -21,11 +19,11 @@ exports.addBalance = (req, res) => {
         simController.existsSim(nakedPhoneNumber)
             .then(sim => {
                 if (sim.active === true) {
-                    console.log("El número ya ha sido activado");
+                    console.log("Phone number already active");
                     twiml.message('El número ' + enteredPhoneNumber + ' ya ha sido activado. verifíque que el número sea correcto e inténtelo de nuevo. Para más información comuníquese al teléfono: ' + CUSTOMER_SERVICE_NUMBER);
                     res.end(twiml.toString());
                 } else {
-                    console.log("Procesando recarga");
+                    console.log("Processing");
 
                     const args = {
                         APIKey: process.env.RECARGAS_API_KEY,
@@ -43,7 +41,7 @@ exports.addBalance = (req, res) => {
                                 transaction.return_code = 'Error';
                                 transaction.transaction_id = 'Error';
                                 transaction.transaction_number = 'Error';
-                                twiml.message('Por el momento el sistema no está disponible. Para más información comuníquese al teléfono: ' + CUSTOMER_SERVICE_NUMBER);
+                                twiml.message('Por el momento el sistema no está disponible. Para más información comuníquese al teléfono ' + CUSTOMER_SERVICE_NUMBER);
                                 res.end(twiml.toString());
                                 console.log(err);
                             } else {
@@ -51,7 +49,7 @@ exports.addBalance = (req, res) => {
                                 transaction.transaction_id = result.return.IDTransaction['$value'];
                                 transaction.transaction_number = result.return.TransactionNumber['$value'];
                                 if (result.return.ReturnCode['$value'] === '0') {
-                                    console.log("Recarga exitosa");
+                                    console.log("Transaction Success");
                                     transaction.success = true;
                                     twiml.message('Se ha abonado $' + result.return.Amount['$value'] + '.00 MXN de saldo a la linea ' + result.return.PhoneNumber['$value'] + ' con el folio ' + result.return.TransactionNumber['$value']);
 
@@ -68,9 +66,9 @@ exports.addBalance = (req, res) => {
 
 
                                 } else {
-                                    console.log("Error al realizar recarga");
+                                    console.log("Transaction Error");
                                     transaction.success = false;
-                                    twiml.message('Por el momento el sistema no está disponible. Para más información comuníquese al teléfono: ' + CUSTOMER_SERVICE_NUMBER);
+                                    twiml.message('Por el momento el sistema no está disponible. Para más información comuníquese al teléfono ' + CUSTOMER_SERVICE_NUMBER);
                                 }
                                 res.end(twiml.toString());
                             }
@@ -93,7 +91,7 @@ exports.addBalance = (req, res) => {
             })
             .catch(error => {
                 if (error === 404) {
-                    twiml.message(enteredPhoneNumber + ' no está dado de alta para recargas automáticas.');
+                    twiml.message('El número ' + enteredPhoneNumber + ' no está dado de alta para recargas automáticas.');
                 } else {
                     twiml.message('Por el momento el sistema no está disponible. Para más información comuníquese al teléfono: ' + CUSTOMER_SERVICE_NUMBER);
                 }
@@ -101,7 +99,7 @@ exports.addBalance = (req, res) => {
                 res.end(twiml.toString());
             })
     } else {
-        console.log("Número de teléfono no valido");
+        console.log("Invalid Phone Number");
         twiml.message(enteredPhoneNumber + ' no es un número de teléfono válido');
         res.end(twiml.toString());
     }
