@@ -19,7 +19,7 @@ exports.addBalance = (req, res) => {
             .then(sim => {
                 if (sim.active === true) {
                     console.log("Phone number already active");
-                    twiml.message('El número ' + enteredPhoneNumber + ' ya ha sido activado. verifíque que el número sea correcto e inténtelo de nuevo. Para más información comuníquese al teléfono: ' + CUSTOMER_SERVICE_NUMBER);
+                    twiml.message('El número ' + enteredPhoneNumber + ' ya ha sido activado. verifíque que el número sea correcto e inténtelo de nuevo. Para más información comuníquese al teléfono ' + CUSTOMER_SERVICE_NUMBER);
                     res.end(twiml.toString());
                 } else {
                     console.log("Processing");
@@ -90,7 +90,7 @@ exports.addBalance = (req, res) => {
                 if (error === 404) {
                     twiml.message('El número ' + enteredPhoneNumber + ' no está dado de alta para recargas automáticas.');
                 } else {
-                    twiml.message('Por el momento el sistema no está disponible. Para más información comuníquese al teléfono: ' + CUSTOMER_SERVICE_NUMBER);
+                    twiml.message('Por el momento el sistema no está disponible. Para más información comuníquese al teléfono ' + CUSTOMER_SERVICE_NUMBER);
                 }
                 console.log(error);
                 res.end(twiml.toString());
