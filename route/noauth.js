@@ -18,6 +18,7 @@ router.post('/noauth', /**
            user.name = req.body.name;
            user.type = req.body.type;
            user.email = req.body.email;
+           user.phone_number = req.body.phone_number;
            user.password = hash;
 
            // save the user and check for errors

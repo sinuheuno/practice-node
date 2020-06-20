@@ -10,6 +10,7 @@ const express         = require('express'),
     distributorRoutes = require('./route/distributor'),
     simRoutes         = require('./route/sim'),
     noauthRoutes      = require('./route/noauth');
+    simController     = require('./controller/sim')
 
 const server = express();
 require('dotenv').config();
@@ -31,7 +32,11 @@ server.use('/api/v1/distributor', distributorRoutes);
 
 server.use('/api/v1/sim', simRoutes);
 
-server.use('/api/v1/user', noauthRoutes);
+/**
+ * Creates a new user
+ * Comment in prod
+ */
+//server.use('/api/v1/user', noauthRoutes);
 
 server.use(serveStatic(__dirname + "/dist"));
 

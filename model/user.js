@@ -21,6 +21,10 @@ const User = new Schema({
     type: {
         type: String,
         required: true
+    },
+    phone_number: {
+        type: String,
+        required: true
     }
 }, { versionKey: false });
 
