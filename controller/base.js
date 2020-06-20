@@ -95,7 +95,7 @@ exports.update = (req, res, entity) => {
             }
         });
     });
-}
+};
 
 /**
  * Deletes an object
@@ -114,4 +114,4 @@ exports.delete = (req,res, entity) => {
             message: entity.messages.success.deleted
         });
     });
-}
+};

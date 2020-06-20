@@ -4,11 +4,11 @@ const express         = require('express'),
     database          = require('./config/db'),
     cors              = require('cors'),
     port              = process.env.PORT || 8080,
-    serveStatic       = require('serve-static');
-    balanceRoutes     = require('./route/balance');
-    userRoutes        = require('./route/user');
-    distributorRoutes = require('./route/distributor');
-    simRoutes         = require('./route/sim');
+    serveStatic       = require('serve-static'),
+    balanceRoutes     = require('./route/balance'),
+    userRoutes        = require('./route/user'),
+    distributorRoutes = require('./route/distributor'),
+    simRoutes         = require('./route/sim'),
     noauthRoutes      = require('./route/noauth');
 
 const server = express();

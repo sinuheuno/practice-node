@@ -7,7 +7,7 @@ const soap = require('soap'),
     transaction = require('../model/transaction'),
     models = require('../utils/model-list'),
     ObjectId = require('mongoose').Types.ObjectId,
-    Transaction = require('../model/transaction');
+    Transaction = require('../model/transaction'),
     simController = require('../controller/sim');
 
 exports.addBalance = (req, res) => {

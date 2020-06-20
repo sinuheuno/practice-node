@@ -1,9 +1,8 @@
-const userTypes = require('../utils/validations/user-type');
-const models = require('../utils/model-list');
-const baseController = require('./base');
-const userValidator = require('../utils/validations/user-validator');
-const jwt = require('jsonwebtoken');
-const ObjectId = require('mongoose').Types.ObjectId;
+const userTypes = require('../utils/validations/user-type'),
+    models = require('../utils/model-list'),
+    baseController = require('./base'),
+    userValidator = require('../utils/validations/user-validator'),
+    jwt = require('jsonwebtoken');
 
 // Handle index actions
 exports.index = (req, res) => {
@@ -28,7 +27,7 @@ exports.new = (req, res) => {
 
                 newEntity['active'] = true;
 
-                var decoded = jwt.decode(req.token, {complete: true});
+                const decoded = jwt.decode(req.token, {complete: true});
 
                 models.list.user.model.findById(decoded.payload._id, (error, user) => {
                     if (error) {

@@ -1,11 +1,11 @@
 // Import Models
-const User = require('../model/user');
-const userTypes = require('../utils/validations/user-type');
-const userValidator = require('../utils/validations/user-validator');
-const jwt = require('jsonwebtoken');
-let bcrypt = require('bcrypt');
-let models = require('../utils/model-list');
-let controller = require('./base');
+const User = require('../model/user'),
+    userTypes = require('../utils/validations/user-type'),
+    userValidator = require('../utils/validations/user-validator'),
+    jwt = require('jsonwebtoken'),
+    bcrypt = require('bcrypt'),
+    models = require('../utils/model-list'),
+    controller = require('./base');
 
 // Handle index actions
 exports.index =  (req, res) => {
@@ -25,8 +25,8 @@ exports.new = (req, res) => {
                     if (err) {
                         res.json(models.list.user.messages.error.creatingUserError);
                     } else {
-                        var user = new User();
-                        user.active = true
+                        const user = new User();
+                        user.active = true;
                         user.name = req.body.name;
                         user.type = req.body.type;
                         user.email = req.body.email;

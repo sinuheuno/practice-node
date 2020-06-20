@@ -1,6 +1,6 @@
 const express = require('express'),
     router = express.Router(),
-    bcrypt = require('bcrypt');
+    bcrypt = require('bcrypt'),
     User   = require('../model/user');
 
 router.post('/noauth', /**
@@ -14,7 +14,7 @@ router.post('/noauth', /**
        } else {
            let user = new User();
 
-           user.active = true
+           user.active = true;
            user.name = req.body.name;
            user.type = req.body.type;
            user.email = req.body.email;
