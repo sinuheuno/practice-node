@@ -34,55 +34,61 @@ exports.addBalance = (req, res) => {
                     const transaction = new Transaction();
 
                     soap.createClient(process.env.RECARGAS_API_URL, { wsdl_options: { timeout: 70000 }  },function(err, client) {
-                        client.TAERequest(args, function(err, result) {
-                            if (err) {
-                                transaction.success = false;
-                                transaction.return_code = 'Error';
-                                transaction.transaction_id = 'Error';
-                                transaction.transaction_number = 'Error';
-                                twiml.message('Por el momento el sistema no está disponible. Para más información comuníquese al teléfono ' + CUSTOMER_SERVICE_NUMBER);
-                                res.end(twiml.toString());
-                                console.log(err);
-                            } else {
-                                transaction.return_code = result.return.ReturnCode['$value'];
-                                transaction.transaction_id = result.return.IDTransaction['$value'];
-                                transaction.transaction_number = result.return.TransactionNumber['$value'];
-                                if (result.return.ReturnCode['$value'] === '0') {
-                                    console.log("Transaction Success");
-                                    transaction.success = true;
-                                    twiml.message('Se ha abonado $' + result.return.Amount['$value'] + '.00 MXN de saldo a la linea ' + result.return.PhoneNumber['$value'] + ' con el folio ' + result.return.TransactionNumber['$value']);
-
-                                    sim.active = true;
-                                    sim.activation_date = Date.now();
-
-                                    sim.save(err => {
-                                        if (err) {
-                                            console.log(err)
-                                        } else {
-                                            console.log('Success Ppdating Sim')
-                                        }
-                                    })
-                                } else {
-                                    console.log("Transaction Error");
-                                    transaction.success = false;
-                                    twiml.message('Por el momento el sistema no está disponible. Para más información comuníquese al teléfono ' + CUSTOMER_SERVICE_NUMBER);
-                                }
-                                res.end(twiml.toString());
-                            }
-
-                            transaction.date = Date.now();
-                            transaction.amount = AMOUNT;
-                            transaction.phone_number = nakedPhoneNumber;
-                            transaction.distributor_id = sim.distributor_id;
-
-                            transaction.save((err) => {
+                        if (client) {
+                            client.TAERequest(args, function(err, result) {
                                 if (err) {
-                                    console.log(err)
+                                    transaction.success = false;
+                                    transaction.return_code = 'Error';
+                                    transaction.transaction_id = 'Error';
+                                    transaction.transaction_number = 'Error';
+                                    twiml.message('Por el momento el sistema no está disponible. Para más información comuníquese al teléfono ' + CUSTOMER_SERVICE_NUMBER);
+                                    res.end(twiml.toString());
+                                    console.log(err);
                                 } else {
-                                    console.log("Success saving transaction")
+                                    transaction.return_code = result.return.ReturnCode['$value'];
+                                    transaction.transaction_id = result.return.IDTransaction['$value'];
+                                    transaction.transaction_number = result.return.TransactionNumber['$value'];
+                                    if (result.return.ReturnCode['$value'] === '0') {
+                                        console.log("Transaction Success");
+                                        transaction.success = true;
+                                        twiml.message('Se ha abonado $' + result.return.Amount['$value'] + '.00 MXN de saldo a la linea ' + result.return.PhoneNumber['$value'] + ' con el folio ' + result.return.TransactionNumber['$value']);
+
+                                        sim.active = true;
+                                        sim.activation_date = Date.now();
+
+                                        sim.save(err => {
+                                            if (err) {
+                                                console.log(err)
+                                            } else {
+                                                console.log('Success Ppdating Sim')
+                                            }
+                                        })
+                                    } else {
+                                        console.log("Transaction Error");
+                                        transaction.success = false;
+                                        twiml.message('Por el momento el sistema no está disponible. Para más información comuníquese al teléfono ' + CUSTOMER_SERVICE_NUMBER);
+                                    }
+                                    res.end(twiml.toString());
                                 }
-                            });
-                        })
+
+                                transaction.date = Date.now();
+                                transaction.amount = AMOUNT;
+                                transaction.phone_number = nakedPhoneNumber;
+                                transaction.distributor_id = sim.distributor_id;
+
+                                transaction.save((err) => {
+                                    if (err) {
+                                        console.log(err)
+                                    } else {
+                                        console.log("Success saving transaction")
+                                    }
+                                });
+                            })
+                        } else {
+                            twiml.message('Por el momento el sistema no está disponible. Para más información comuníquese al teléfono ' + CUSTOMER_SERVICE_NUMBER);
+                            res.end(twiml.toString());
+                            console.log(err);
+                        }
                     });
                 }
             })
