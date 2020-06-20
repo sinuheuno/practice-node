@@ -58,6 +58,16 @@ exports.addBalance = (req, res) => {
 
 
                                     // Agrégalo aquí.
+                                    sim.active = true;
+                                    sim.activation_date = Date.now()
+
+                                    sim.save(err => {
+                                        if (err) {
+                                            console.log(err)
+                                        } else {
+                                            console.log('Success updating sim')
+                                        }
+                                    })
 
 
 
