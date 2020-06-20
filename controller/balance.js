@@ -10,7 +10,7 @@ const soap = require('soap'),
 exports.addBalance = (req, res) => {
     const twiml = new MessagingResponse();
     //const enteredPhoneNumber = req.body.Body;
-    const enteredPhoneNumber = "9911083001";
+    const enteredPhoneNumber = "3434233424";
     const nakedPhoneNumber = enteredPhoneNumber.replace(/[^0-9]/g, '');
 
     res.writeHead(200, {'Content-Type': 'text/xml'});
@@ -58,6 +58,16 @@ exports.addBalance = (req, res) => {
 
 
                                     // Agrégalo aquí.
+                                    sim.active = true;
+                                    sim.activation_date = Date.now()
+
+                                    sim.save(err => {
+                                        if (err) {
+                                            console.log(err)
+                                        } else {
+                                            console.log('Success updating sim')
+                                        }
+                                    })
 
 
 
