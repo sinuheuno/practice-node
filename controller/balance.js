@@ -54,6 +54,19 @@ exports.addBalance = (req, res) => {
                                     console.log("Recarga exitosa");
                                     transaction.success = true;
                                     twiml.message('Se ha abonado $' + result.return.Amount['$value'] + '.00 MXN de saldo a la linea ' + result.return.PhoneNumber['$value'] + ' con el folio ' + result.return.TransactionNumber['$value']);
+
+
+
+
+
+                                    // Agrégalo aquí.
+
+
+
+
+
+
+
                                 } else {
                                     console.log("Error al realizar recarga");
                                     transaction.success = false;
