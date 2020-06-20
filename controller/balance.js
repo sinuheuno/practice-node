@@ -4,7 +4,6 @@ const CUSTOMER_SERVICE_NUMBER = '999 573 1249';
 
 const soap = require('soap'),
     MessagingResponse = require('twilio').twiml.MessagingResponse,
-    transaction = require('../model/transaction'),
     models = require('../utils/model-list'),
     ObjectId = require('mongoose').Types.ObjectId,
     Transaction = require('../model/transaction'),
@@ -19,7 +18,7 @@ exports.addBalance = (req, res) => {
     res.writeHead(200, {'Content-Type': 'text/xml'});
 
     if (nakedPhoneNumber.length === 10) {
-        simController(nakedPhoneNumber)
+        simController.existsSim(nakedPhoneNumber)
             .then(sim => {
                 if (nakedPhoneNumber === "4804340203") {
                     twiml.message(enteredPhoneNumber + ' no está dado de alta para recargas automáticas.');
@@ -42,7 +41,7 @@ exports.addBalance = (req, res) => {
                     /**
                      ***** A ver si sí es así 
                      */
-                    let transaction = new Transaction();
+                    const transaction = new Transaction();
         
                     transaction.date = '',
                     transaction.phone_number = '',
