@@ -115,9 +115,17 @@ exports.pushSims = (req, res) => {
                                     .then(response => {
                                         console.log('respuesta', response)
                                         if (response !== undefined) {
-                                            models.list.sim.model.insertMany(response.sims, (error, sims) => {
+                                            models.list.sim.model.insertMany(response.sims, { ordered: false }, (error, sims) => {
                                                 if (error) {
-                                                    res.json(error);
+                                                    if (error.name === 'BulkWriteError') {
+                                                        res.json({
+                                                            message: models.list.sim.messages.error.duplicatePhoneNumber,
+                                                            writeErrors: error.writeErrors,
+                                                            insertedDocs: error.insertedDocs
+                                                        })
+                                                    } else {
+                                                        res.json(error)
+                                                    }
                                                 } else {
                                                     res.json({
                                                         message: models.list.sim.messages.success.simsRegistered,
