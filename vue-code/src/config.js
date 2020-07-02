@@ -1,5 +1,5 @@
 export default {
-  environment: 'dev',
+  environment: 'prod',
   environments: {
     dev: {
       baseUrl: 'http://localhost:8080/api/v1'

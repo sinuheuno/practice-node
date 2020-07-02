@@ -38,6 +38,28 @@
         </ul>
       </div>
     </b-row>
+    <b-row v-if="wrongSimsMongo.length > 0">
+      <div style="max-height: 500px; width: 350px; overflow: scroll; text-align: left;">
+        <p>Los siguientes números ya se encuentran en la base de datos:</p>
+        <ul>
+          <li v-for="(sim) in wrongSimsMongo" :key="sim.op._id">
+            <span>Num: {{ sim.op.phone_number }}</span>
+            <br>
+            <span>SN: {{ sim.op.serial_number }}</span>
+            <br>
+          </li>
+        </ul>
+      </div>
+      <b-container>
+        <b-row>
+          <b-col>
+            <div class="text-align: center;">
+              <b-button @click="clearErrorArea">Limpiar Números</b-button>
+            </div>
+          </b-col>
+        </b-row>
+      </b-container>
+    </b-row>
   </div>
 </template>
 
@@ -54,7 +76,8 @@ export default {
   data() {
     return {
       newNumbers: '',
-      wrongSims: []
+      wrongSims: [],
+      wrongSimsMongo: []
     }
   },
   props: {
@@ -133,6 +156,7 @@ export default {
                   okVariant: 'success'
                 }
               )
+              this.wrongSimsMongo = []
               this.getDistributors()
               this.$emit('setSelectedDistributor', null)
               this.newNumbers = ""
@@ -143,30 +167,45 @@ export default {
                 this.wrongSims = response.data.not_registered_sims
               }
             } else {
-              if (response.data.message === 'Access token expired') {
-                this.showDistributorSpinner = false
-                this.$bvModal
-                  .msgBoxOk('Sesión expirada. Vuelve a iniciar sesión.', {
-                    title: 'Error',
-                    size: 'lg',
-                    buttonSize: 'lg',
-                    okVariant: 'success'
-                  })
-                  .then(response => {
-                    if (response) {
-                      this.$router.push('/login')
-                      authentication.logOut()
-                      this.$emit('setShowNumbersSpinner', false)
-                      this.$emit('setSims', null)
-                    }
-                  })
+              if (response.data.message.code === 1003) {
+                this.wrongSimsMongo = response.data.writeErrors
+                this.newNumbers = ''
+                _this.$emit('setShowNumbersSpinner', false)
+                this.$bvModal.msgBoxOk(
+                'Números guardados correctamente. Se encontraron números que ya están en la base de datos. Se mostrarán al cerrar esta ventana.',
+                {
+                  title: 'Éxito',
+                  size: 'lg',
+                  buttonSize: 'lg',
+                  okVariant: 'success'
+                }
+              )
               } else {
-                this.$emit('setShowNumbersSpinner', false)
-                modals.error(
-                  modal,
-                  'Ocurrió un error al guardar. Intenta de nuevo'
-                )
-                this.$emit('setSims', null)
+                if (response.data.message === 'Access token expired') {
+                  this.showDistributorSpinner = false
+                  this.$bvModal
+                    .msgBoxOk('Sesión expirada. Vuelve a iniciar sesión.', {
+                      title: 'Error',
+                      size: 'lg',
+                      buttonSize: 'lg',
+                      okVariant: 'success'
+                    })
+                    .then(response => {
+                      if (response) {
+                        this.$router.push('/login')
+                        authentication.logOut()
+                        this.$emit('setShowNumbersSpinner', false)
+                        this.$emit('setSims', null)
+                      }
+                    })
+                } else {
+                  this.$emit('setShowNumbersSpinner', false)
+                  modals.error(
+                    modal,
+                    'Ocurrió un error al guardar. Intenta de nuevo'
+                  )
+                  this.$emit('setSims', null)
+                }
               }
             }
           })
@@ -184,6 +223,9 @@ export default {
           okVariant: 'success'
         })
       }
+    },
+    clearErrorArea () {
+      this.wrongSimsMongo = []
     }
   }
 }
