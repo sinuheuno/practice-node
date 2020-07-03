@@ -16,7 +16,7 @@ const server = express();
 require('dotenv').config();
 
 mongoose.Promise = global.Promise;
-mongoose.connect(database.url, { useNewUrlParser: true, useUnifiedTopology: true  });
+mongoose.connect(database.url, { useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex: true });
 mongoose.set('debug', true);
 
 server.use(cors())

@@ -17,7 +17,10 @@ const Sim = new Schema({
     },
     phone_number: {
         type: String,
-        required: true
+        required: true,
+        index: {
+            unique: true
+        }
     },
     register_date: {
         type: Date,

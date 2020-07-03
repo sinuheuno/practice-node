@@ -112,6 +112,11 @@ exports.messages = {
                 code: 1002,
                 status: 'error',
                 message: 'SIM doesn\'t exist'
+            },
+            duplicatePhoneNumber: {
+                code: 1003,
+                status: 'error',
+                message: 'Duplicated sim(s)'
             }
         },
         success: {
