@@ -9,7 +9,7 @@ module.exports = {
             host: '35.208.12.243',
             ref: 'origin/dev',
             repo: 'git@gitlab.com:magna-comunicaciones/sim-card-manager.git',
-            path: '/home/carlos/',
+            path: '/home/carlos/sim-card-manager',
             'post-deploy': 'npm install && pm2 startOrRestart ecosystem.config.js'
         }
     }
