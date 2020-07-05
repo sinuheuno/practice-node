@@ -25,7 +25,7 @@ exports.addBalance = (req, res) => {
                     console.log("Processing");
 
                     const args = {
-                        APIKey: "c72c9adf1a4f7433b4153c5ed20758f5",
+                        APIKey: process.env.RECARGAS_API_KEY,
                         ProductCode: PRODUCT_CODE,
                         Amount: AMOUNT,
                         PhoneNumber: nakedPhoneNumber
@@ -33,7 +33,7 @@ exports.addBalance = (req, res) => {
 
                     const transaction = new Transaction();
 
-                    soap.createClient("http://recargasnacionales.com/wstest?wsdl", { wsdl_options: { timeout: 70000 }  },function(err, client) {
+                    soap.createClient(process.env.RECARGAS_API_URL, { wsdl_options: { timeout: 70000 }  },function(err, client) {
                         if (client) {
                             client.TAERequest(args, function(err, result) {
                                 if (err) {

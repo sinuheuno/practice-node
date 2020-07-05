@@ -8,7 +8,7 @@ router.post('/noauth', /**
 * name, type:'admin', email and password most be provided
 */
   (req, res) => {
-    bcrypt.hash(req.body.password, Number(12), (err, hash) => {
+    bcrypt.hash(req.body.password, Number(process.env.SALT_ROUNDS), (err, hash) => {
        if (err) {
            res.json(err);
        } else {

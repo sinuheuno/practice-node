@@ -21,7 +21,7 @@ exports.new = (req, res) => {
     userValidator.validateUser(req.token, res, userTypes.user)
         .then(response => {
             if (response) {
-                bcrypt.hash(req.body.password, 12, (err, hash) => {
+                bcrypt.hash(req.body.password, process.env.SALT_ROUNDS, (err, hash) => {
                     if (err) {
                         res.json(models.list.user.messages.error.creatingUserError);
                     } else {
@@ -86,7 +86,7 @@ exports.login = (req, res) => {
         } else if (user.length === 1) {
             bcrypt.compare(req.body.password, user[0].password, (err, result) => {
                 if (result) {
-                    jwt.sign({ user: user[0].email, password: user[0].password, type: user[0].type, _id: user[0]._id }, "Nb!{+E/W9;/K7^<-es7)F]qX3[\"CS$Y-7g*AC2-]BVv/Qe5UwtmSkA}5h9?ZwDE)Bfa4Y%W/t'7Y+ka@CcHEvx/C>$)~[f(sc!+SFrsP?%_Z.=Fj.5Ea:mu6&^56[w%<", { expiresIn: '30d' }, (err, token) => {
+                    jwt.sign({ user: user[0].email, password: user[0].password, type: user[0].type, _id: user[0]._id }, process.env.SECRET_KEY, { expiresIn: '30d' }, (err, token) => {
                         if (err) {
                             res.json(err)
                         } else {
