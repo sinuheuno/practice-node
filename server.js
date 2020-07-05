@@ -41,5 +41,5 @@ server.use('/api/v1/sim', simRoutes);
 server.use(serveStatic(__dirname + "/dist"));
 
 server.listen(port, () => {
-    console.log('API is running on PORT: ' + port)
+    console.log('API is running on PORT: ' + 3000)
 });
