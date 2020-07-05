@@ -32,6 +32,7 @@
     "twilio": "^3.46.0"
   },
   "devDependencies": {
-    "nodemon": "^2.0.4"
+    "nodemon": "^2.0.4",
+    "pm2": "^4.4.0"
   }
 }
