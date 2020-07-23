@@ -240,11 +240,12 @@ exports.getSimsByDistributorId = (req, res) => {
     userValidator.validateUser(req.token, res, userTypes.admin)
         .then(response => {
             if (response) {
-                models.list.sim.model.find({ distributor_id: ObjectId(req.params.id) }, (error, sims) => {
+                models.list.sim.model.find({ distributor_id: ObjectId(req.params.id) }, null, { sort: { active: false } }, (error, sims) => {
                     if (error) {
                         res.json(error);
                     } else {
                         if (sims !== null) {
+                            console.log('sims ', sims)
                             res.json({
                                 message: models.list.sim.messages.success.retrieved,
                                 data: sims
