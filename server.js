@@ -36,9 +36,9 @@ server.use('/api/v1/sim', simRoutes);
  * Creates a new user
  * Comment in prod
  */
-//server.use('/api/v1/user', noauthRoutes);
+server.use('/api/v1/user', noauthRoutes);
 
-server.use(serveStatic(__dirname + "/dist"));
+// server.use(serveStatic(__dirname + "/dist"));
 
 server.listen(port, () => {
     console.log('API is running on PORT: ' + 3000)
